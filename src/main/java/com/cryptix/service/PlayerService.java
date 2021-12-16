@@ -40,8 +40,12 @@ public class PlayerService {
 		return playerRepository.findAll();
 	}
 	
-	public void savePlayer(Player player) {
-		playerRepository.save(player);
+	public Player savePlayer(Player player) {
+		return playerRepository.save(player);
+	}
+	
+	public void saveSquad(List<Player> players) {
+		playerRepository.saveAll(players);
 	}
 	
 	public List<Player> findAllByTeam(Team team){
@@ -86,6 +90,14 @@ public class PlayerService {
 			summary.setAvgBowling(Skill.get((int) Math.round(players.stream().filter(player -> player.getPlayerType().equals(PlayerType.Bowler) || player.getPlayerType().equals(PlayerType.AllRounder)).mapToInt(player -> player.getBowling().getValue()).average().getAsDouble())).getLevel());
 		}
 		return summary;
+	}
+	
+	public List<Player> parseImportedSquad (List<String> importedSquad){
+		List<Player> players = new ArrayList<Player>();
+		for(String player: importedSquad) {
+			players.add(parseImportedPlayer("\"" + player + "\""));
+		}
+		return players;
 	}
 	
 	public Player parseImportedPlayer(String importedPlayer) {

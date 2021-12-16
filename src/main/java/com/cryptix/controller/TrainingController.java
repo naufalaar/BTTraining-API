@@ -49,20 +49,28 @@ public class TrainingController {
 		return managerService.getManager(managerId);
 	}
 	
+	// Get manager after login
 	@PostMapping("/getManagerByUsername")
 	public Manager getManagerByUsername(@RequestBody Manager manager){
 		return managerService.getManagerByUsername(manager);
 	}
 	
+	//Sign Up Player
 	@PostMapping("/sign-up")
     public void signUp(@RequestBody Manager manager) {
         manager.setPassword(bCryptPasswordEncoder.encode(manager.getPassword()));
         managerService.saveManager(manager);
     }
 	
+	//Save player after parsing
 	@PostMapping("savePlayer")
-	public void savePlayer(@RequestBody Player player) {
-		playerService.savePlayer(player);
+	public Player savePlayer(@RequestBody Player player) {
+		return playerService.savePlayer(player);
+	}
+	
+	@PostMapping("saveSquad")
+	public void saveSquad(@RequestBody List<Player> players) {
+		playerService.saveSquad(players);
 	}
 	
 	@PostMapping("/teamPlayers")
@@ -70,11 +78,19 @@ public class TrainingController {
 		return playerService.findAllByTeam(team);
 	}
 	
+	//To parse players
 	@PostMapping("/parsePlayer")
 	public Player parseImportedPlayer(@RequestBody String importedPlayer) {
 		return playerService.parseImportedPlayer(importedPlayer);
 	}
 	
+	//To parse squad
+	@PostMapping("/parseSquad")
+	public List<Player> parseImportedSquad(@RequestBody List<String> importedSquad) {
+		return playerService.parseImportedSquad(importedSquad);
+	}
+	
+	// Team Summary
 	@PostMapping("/teamSummary")
 	public Summary getTeamSummary(@RequestBody Team team) {
 		return playerService.getTeamSummary(team);
@@ -110,6 +126,7 @@ public class TrainingController {
 		trainingSessionService.saveMultipleSession(trainingSessions);
 	}
 	
+	//After login
 	@PostMapping("/getCurrentWeek")
 	public List<Integer> getCurrentWeek(){
 		return trainingSessionService.getCurrentWeek();
