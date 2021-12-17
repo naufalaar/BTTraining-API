@@ -33,8 +33,21 @@ public class TrainingSessionService {
 		return trainingSessionRepository.findAllByTeam(team);
 	}
 	
-	public void saveMultipleSession(List<TrainingSession> trainingSessions) {
-		trainingSessionRepository.saveAll(trainingSessions);
+	public List<TrainingSession> saveMultipleSession(List<TrainingSession> trainingSessions) {
+		Team team = null;
+		List<TrainingSession> deleteSessions = trainingSessions.stream().filter(o -> o.getId() != 0 || o.getQuantity() == 0).collect(Collectors.toList());
+		if(deleteSessions.size() > 0) {
+			team = deleteSessions.get(0).getTeam();
+			trainingSessionRepository.deleteAll(deleteSessions);
+		}
+		trainingSessions.removeIf(item -> item.getQuantity() == 0);
+		if (trainingSessions.size() > 0) {
+			List<TrainingSession> result = trainingSessionRepository.saveAll(trainingSessions);
+			if(team == null) {	
+				team = result.get(0).getTeam();
+			}
+		}
+		return getAllTrainingSession(team);
 	}
 	
 	public List<Integer> getCurrentWeek(){

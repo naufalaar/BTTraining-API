@@ -39,15 +39,15 @@ public class TrainingController {
 	@Autowired
 	private TrainingSessionService trainingSessionService;
 	
-	@GetMapping("/allPlayers")
-	public List<Player> getAllPlayers(){
-		return playerService.getAllPlayers();
-	}
+//	@GetMapping("/allPlayers")
+//	public List<Player> getAllPlayers(){
+//		return playerService.getAllPlayers();
+//	}
 	
-	@GetMapping("/getManager")
-	public Manager getManager(@RequestParam("managerId") int managerId){
-		return managerService.getManager(managerId);
-	}
+//	@GetMapping("/getManager")
+//	public Manager getManager(@RequestParam("managerId") int managerId){
+//		return managerService.getManager(managerId);
+//	}
 	
 	// Get manager after login
 	@PostMapping("/getManagerByUsername")
@@ -68,11 +68,13 @@ public class TrainingController {
 		return playerService.savePlayer(player);
 	}
 	
+	//import whole squad
 	@PostMapping("saveSquad")
 	public void saveSquad(@RequestBody List<Player> players) {
 		playerService.saveSquad(players);
 	}
 	
+	//Get all players
 	@PostMapping("/teamPlayers")
 	public List<Player> getAllPlayers(@RequestBody Team team){
 		return playerService.findAllByTeam(team);
@@ -96,34 +98,38 @@ public class TrainingController {
 		return playerService.getTeamSummary(team);
 	}
 	
+	//save pop and plops
 	@PostMapping("/saveSkillChange")
 	public List<Player> saveSkillChange(@RequestBody SkillChange skillChange) {
 		return skillChangeService.saveSkillChange(skillChange);
 	}
 	
-	@PostMapping("/playerSkillChange")
-	public List<SkillChange> getPlayerSkillChange(@RequestBody Player player) {
-		return skillChangeService.findAllByPlayer(player);
-	}
 	
-	@PostMapping("/saveTrainingSession")
-	public void saveTrainingSession(@RequestBody TrainingSession trainingSession) {
-		trainingSessionService.saveTrainingSession(trainingSession);
-	}
+//	@PostMapping("/playerSkillChange")
+//	public List<SkillChange> getPlayerSkillChange(@RequestBody Player player) {
+//		return skillChangeService.findAllByPlayer(player);
+//	}
+//	
+//	@PostMapping("/saveTrainingSession")
+//	public void saveTrainingSession(@RequestBody TrainingSession trainingSession) {
+//		trainingSessionService.saveTrainingSession(trainingSession);
+//	}
+//	
+//	@PostMapping("/getTrainingSession")
+//	public Optional<TrainingSession> getTrainingSession(@RequestBody TrainingSession trainingSession) {
+//		return trainingSessionService.getTrainingSession(trainingSession);
+//	}
 	
-	@PostMapping("/getTrainingSession")
-	public Optional<TrainingSession> getTrainingSession(@RequestBody TrainingSession trainingSession) {
-		return trainingSessionService.getTrainingSession(trainingSession);
-	}
-	
+	//get training sessions
 	@PostMapping("/getAllTrainingSession")
 	public List<TrainingSession> getAllTrainingSession(@RequestBody Team team) {
 		return trainingSessionService.getAllTrainingSession(team);
 	}
 	
+	//save sessions
 	@PostMapping("/saveMultipleSessions")
-	public void saveMultipleSessions(@RequestBody List<TrainingSession> trainingSessions) {
-		trainingSessionService.saveMultipleSession(trainingSessions);
+	public List<TrainingSession> saveMultipleSessions(@RequestBody List<TrainingSession> trainingSessions) {
+		return trainingSessionService.saveMultipleSession(trainingSessions);
 	}
 	
 	//After login
