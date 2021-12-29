@@ -17,6 +17,9 @@ public class ManagerService {
 	}
 	
 	public void saveManager(Manager manager) {
+		if(manager.getFranchise().getTeamId() == 0) {
+			manager.setFranchise(null);
+		}
 		managerRepository.save(manager);
 	}
 	

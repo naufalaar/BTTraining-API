@@ -68,6 +68,13 @@ public class TrainingController {
 		return playerService.savePlayer(player);
 	}
 	
+	
+	// Remove Players
+	@PostMapping("removePlayers")
+	public List<Player> removePlayers(@RequestBody List<Player> players) {
+		return playerService.removePlayers(players);
+	}
+	
 	//import whole squad
 	@PostMapping("saveSquad")
 	public void saveSquad(@RequestBody List<Player> players) {
@@ -103,6 +110,18 @@ public class TrainingController {
 	public List<Player> saveSkillChange(@RequestBody SkillChange skillChange) {
 		return skillChangeService.saveSkillChange(skillChange);
 	}
+	
+	//Remove Skill Changes
+	@PostMapping("/removeSkillChange")
+	public List<Player> removeSkillChange(@RequestBody List<SkillChange> skillChanges) {
+		return skillChangeService.removeSkillChange(skillChanges);
+	}
+	
+	//add historic pop and plops
+		@PostMapping("/saveHistoricSkillChange")
+		public List<Player> saveHistoricSkillChange(@RequestBody SkillChange skillChange) {
+			return skillChangeService.saveHistoricSkillChange(skillChange);
+		}
 	
 	
 //	@PostMapping("/playerSkillChange")

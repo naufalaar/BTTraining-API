@@ -58,6 +58,20 @@ public class SkillChangeService {
 		
 	}
 	
+	public List<Player> saveHistoricSkillChange(SkillChange skillChange) {
+		skillChangeRepository.save(skillChange);
+		Player player = playerService.findPlayer(skillChange.getPlayerSkillChanges().getPlayerId());
+		return playerService.findAllByTeam(player.getTeam());
+		
+	}
+	
+	public List<Player> removeSkillChange(List<SkillChange> skillChanges) {
+		skillChangeRepository.deleteAll(skillChanges);
+		Player player = playerService.findPlayer(skillChanges.get(0).getPlayerSkillChanges().getPlayerId());
+		return playerService.findAllByTeam(player.getTeam());
+		
+	}
+	
 	public List<SkillChange> findAllByPlayer(Player player){
 		return skillChangeRepository.findAllByPlayerSkillChanges(player, Sort.by("season").descending().and(Sort.by("week").descending()));
 	}

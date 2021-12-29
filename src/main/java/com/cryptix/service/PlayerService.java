@@ -23,6 +23,7 @@ import com.cryptix.enums.Preference;
 import com.cryptix.enums.Leadership;
 import com.cryptix.enums.PlayerType;
 import com.cryptix.enums.Stamina;
+import com.cryptix.enums.Status;
 import com.cryptix.enums.Trait;
 import com.cryptix.repository.PlayerRepository;
 
@@ -38,6 +39,11 @@ public class PlayerService {
 	
 	public List<Player> getAllPlayers(){
 		return playerRepository.findAll();
+	}
+	
+	public List<Player> removePlayers(List<Player> players){
+		playerRepository.deleteAll(players);
+		return findAllByTeam(players.get(0).getTeam());
 	}
 	
 	public Player savePlayer(Player player) {
@@ -70,7 +76,7 @@ public class PlayerService {
 	}
 	
 	public Summary getTeamSummary(Team team) {
-		List<Player> players = findAllByTeam(team);
+		List<Player> players = findAllByTeam(team).stream().filter(player -> player.getPlayerStatus().equals(Status.Active)).collect(Collectors.toList());
 		Summary summary = new Summary();
 		if (players.size() > 0) {
 			summary.setWages(players.stream().mapToInt(Player::getWage).sum());
@@ -101,15 +107,14 @@ public class PlayerService {
 	}
 	
 	public Player parseImportedPlayer(String importedPlayer) {
-		
-		Pattern basicDetails = Pattern.compile("\"(\\d*\\.\\s|)(.*) - (.*) yo, BT Rating=(.*), Wage=£(\\S+) (A|An) (.*) (.*) batter and (a|an) (\\S+) (.*) bowler. He has (.*) leadership skills and (.*) experience. He (has|favours) (.*) (and is a|and|but is a|but has) (.*). He currently has (.*) batting form, (.*) bowling form and (.*) fitness. Stamina: (.*) Wicket Keeping: (.*) Batting: (.*) Concentration: (.*) Bowling: (.*) Consistency: (.*) Fielding: (.*)\"");
+		System.out.println(importedPlayer);
+		Pattern basicDetails = Pattern.compile("\"(\\d*\\.\\s|)(.*) - (.*) yo, BT Rating=(.*), Wage=£(\\S+) (A|An) (.*) (.*) batter and (a|an) (\\S+) (.*) bowler. He has (.*) leadership skills and (.*) experience. He (has|favours) (.*) (and is a|and|but is a|but has|but has a) (.*). He currently has (.*) batting form, (.*) bowling form and (.*) fitness. Stamina: (.*) Wicket Keeping: (.*) Batting: (.*) Concentration: (.*) Bowling: (.*) Consistency: (.*) Fielding: (.*)\"");
 		Player player = new Player();
 		Matcher basicDetailsMatcher = basicDetails.matcher(importedPlayer.replaceAll("shortcut", "").replaceAll("transfer listed", "").replaceAll("   ", " ").replaceAll("  ", " "));
 		if (basicDetailsMatcher.matches()) {
 				player.setFirstName(basicDetailsMatcher.group(2).split(" ", 2)[0]);
 				player.setLastName(basicDetailsMatcher.group(2).split(" ", 2)[1]);
 				player.setAge(Short.parseShort(basicDetailsMatcher.group(3)));
-				//player.setWage(Integer.parseInt(basicDetailsMatcher.group(5).replaceAll(",", "").replaceAll("shortcut", "")));
 				player.setWage(Integer.parseInt(basicDetailsMatcher.group(5).replaceAll(",", "")));
 				
 				player.setBattingAggression(Aggression.valueOf(basicDetailsMatcher.group(7)));
@@ -132,6 +137,7 @@ public class PlayerService {
 				player.setConsistency(Skill.valueOf(basicDetailsMatcher.group(26)));
 				
 				player.setFielding(Skill.valueOf(basicDetailsMatcher.group(27)));
+				player.setPlayerStatus(Status.Active);
 			}
 		return player;
 	}
