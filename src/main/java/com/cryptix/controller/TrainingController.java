@@ -64,7 +64,7 @@ public class TrainingController {
 	
 	//Save player after parsing
 	@PostMapping("savePlayer")
-	public Player savePlayer(@RequestBody Player player) {
+	public List<Player> savePlayer(@RequestBody Player player) {
 		return playerService.savePlayer(player);
 	}
 	
@@ -77,8 +77,8 @@ public class TrainingController {
 	
 	//import whole squad
 	@PostMapping("saveSquad")
-	public void saveSquad(@RequestBody List<Player> players) {
-		playerService.saveSquad(players);
+	public List<Player> saveSquad(@RequestBody List<Player> players) {
+		return playerService.saveSquad(players);
 	}
 	
 	//Get all players
@@ -147,7 +147,8 @@ public class TrainingController {
 	
 	//save sessions
 	@PostMapping("/saveMultipleSessions")
-	public List<TrainingSession> saveMultipleSessions(@RequestBody List<TrainingSession> trainingSessions) {
+//	public List<TrainingSession> saveMultipleSessions(@RequestBody List<TrainingSession> trainingSessions) {
+	public List<Player> saveMultipleSessions(@RequestBody List<TrainingSession> trainingSessions) {
 		return trainingSessionService.saveMultipleSession(trainingSessions);
 	}
 	

@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cryptix.entity.Player;
 import com.cryptix.entity.Team;
 import com.cryptix.entity.TrainingSession;
 import com.cryptix.repository.TrainingSessionRepository;
@@ -20,6 +21,8 @@ public class TrainingSessionService {
 	
 	@Autowired
 	TrainingSessionRepository trainingSessionRepository;
+	@Autowired
+	PlayerService playerService;
 	
 	public void saveTrainingSession(TrainingSession trainingSession) {
 		trainingSessionRepository.save(trainingSession);
@@ -33,7 +36,8 @@ public class TrainingSessionService {
 		return trainingSessionRepository.findAllByTeam(team);
 	}
 	
-	public List<TrainingSession> saveMultipleSession(List<TrainingSession> trainingSessions) {
+//	public List<TrainingSession> saveMultipleSession(List<TrainingSession> trainingSessions) {
+	public List<Player> saveMultipleSession(List<TrainingSession> trainingSessions) {
 		Team team = null;
 		List<TrainingSession> deleteSessions = trainingSessions.stream().filter(o -> o.getId() != 0 || o.getQuantity() == 0).collect(Collectors.toList());
 		if(deleteSessions.size() > 0) {
@@ -47,7 +51,8 @@ public class TrainingSessionService {
 				team = result.get(0).getTeam();
 			}
 		}
-		return getAllTrainingSession(team);
+		return playerService.findAllByTeam(team);
+//		return getAllTrainingSession(team);
 	}
 	
 	public List<Integer> getCurrentWeek(){

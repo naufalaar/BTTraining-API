@@ -13,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cryptix.entity.Player;
+import com.cryptix.entity.SkillChange;
 import com.cryptix.entity.Summary;
 import com.cryptix.entity.Team;
+import com.cryptix.entity.TrainingSession;
 import com.cryptix.enums.Aggression;
 import com.cryptix.enums.BowlerType;
 import com.cryptix.enums.Skill;
@@ -46,12 +48,14 @@ public class PlayerService {
 		return findAllByTeam(players.get(0).getTeam());
 	}
 	
-	public Player savePlayer(Player player) {
-		return playerRepository.save(player);
+	public List<Player> savePlayer(Player player) {
+		playerRepository.save(player);
+		return findAllByTeam(player.getTeam());
 	}
 	
-	public void saveSquad(List<Player> players) {
+	public List<Player> saveSquad(List<Player> players) {
 		playerRepository.saveAll(players);
+		return findAllByTeam(players.get(0).getTeam());
 	}
 	
 	public List<Player> findAllByTeam(Team team){
@@ -138,6 +142,8 @@ public class PlayerService {
 				
 				player.setFielding(Skill.valueOf(basicDetailsMatcher.group(27)));
 				player.setPlayerStatus(Status.Active);
+				player.setPlayerSkillChanges(new ArrayList<SkillChange>());
+				player.setTrainingSessions(new ArrayList<TrainingSession>());
 			}
 		return player;
 	}
