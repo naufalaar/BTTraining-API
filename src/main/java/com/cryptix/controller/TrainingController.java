@@ -39,16 +39,6 @@ public class TrainingController {
 	@Autowired
 	private TrainingSessionService trainingSessionService;
 	
-//	@GetMapping("/allPlayers")
-//	public List<Player> getAllPlayers(){
-//		return playerService.getAllPlayers();
-//	}
-	
-//	@GetMapping("/getManager")
-//	public Manager getManager(@RequestParam("managerId") int managerId){
-//		return managerService.getManager(managerId);
-//	}
-	
 	// Get manager after login
 	@PostMapping("/getManagerByUsername")
 	public Manager getManagerByUsername(@RequestBody Manager manager){
@@ -128,22 +118,6 @@ public class TrainingController {
 		public List<Player> saveHistoricSkillChange(@RequestBody SkillChange skillChange) {
 			return skillChangeService.saveHistoricSkillChange(skillChange);
 		}
-	
-	
-//	@PostMapping("/playerSkillChange")
-//	public List<SkillChange> getPlayerSkillChange(@RequestBody Player player) {
-//		return skillChangeService.findAllByPlayer(player);
-//	}
-//	
-//	@PostMapping("/saveTrainingSession")
-//	public void saveTrainingSession(@RequestBody TrainingSession trainingSession) {
-//		trainingSessionService.saveTrainingSession(trainingSession);
-//	}
-//	
-//	@PostMapping("/getTrainingSession")
-//	public Optional<TrainingSession> getTrainingSession(@RequestBody TrainingSession trainingSession) {
-//		return trainingSessionService.getTrainingSession(trainingSession);
-//	}
 	
 	//get training sessions
 	@PostMapping("/getAllTrainingSession")
