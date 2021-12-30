@@ -62,6 +62,12 @@ public class TrainingController {
         managerService.saveManager(manager);
     }
 	
+	//API Wakeup
+	@PostMapping("/wakeup")
+	public String wakeUp() {
+		return "API Woke Up";
+	}
+	
 	//Save player after parsing
 	@PostMapping("savePlayer")
 	public List<Player> savePlayer(@RequestBody Player player) {
