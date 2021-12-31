@@ -2,6 +2,7 @@ package com.cryptix.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -54,7 +55,7 @@ public class TrainingController {
 	
 	//API Wakeup
 	@PostMapping("/wakeup")
-	public String wakeUp() {
+	public String wakeUp() throws InterruptedException {
 		return "API Woke Up";
 	}
 	
