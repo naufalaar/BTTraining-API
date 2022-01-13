@@ -105,22 +105,21 @@ public class PlayerService {
 	public List<Player> parseImportedSquad (List<String> importedSquad){
 		List<Player> players = new ArrayList<Player>();
 		for(String player: importedSquad) {
-			players.add(parseImportedPlayer("\"" + player + "\""));
+			//players.add(parseImportedPlayer("\"" + player + "\""));
+			players.add(parseImportedPlayer(player));
 		}
 		return players;
 	}
 	
 	public Player parseImportedPlayer(String importedPlayer) {
-		System.out.println(importedPlayer);
-		Pattern basicDetails = Pattern.compile("\"(\\d*\\.\\s|)(.*) - (.*) yo, BT Rating=(.*), Wage=£(\\S+) (A|An) (.*) (.*) batter and (a|an) (\\S+) (.*) bowler. He has (.*) leadership skills and (.*) experience. He (has|favours) (.*) (and is a|and|but is a|but has|but has a) (.*). He currently has (.*) batting form, (.*) bowling form and (.*) fitness. Stamina: (.*) Wicket Keeping: (.*) Batting: (.*) Concentration: (.*) Bowling: (.*) Consistency: (.*) Fielding: (.*)\"");
+		Pattern basicDetails = Pattern.compile("(\\d*\\.\\s|)(.*) - (.*) yo, BT Rating=(.*), Wage=£(\\S+) (A|An) (.*) (.*) batter and (a|an) (\\S+) (.*) bowler. He has (.*) leadership skills and (.*) experience. He (has|favours) (.*) (and is a|and|but is a|but has|but has a) (.*). He currently has (.*) batting form, (.*) bowling form and (.*) fitness. Stamina: (.*) Wicket Keeping: (.*) Batting: (.*) Concentration: (.*) Bowling: (.*) Consistency: (.*) Fielding: (.*)");
 		Player player = new Player();
-		Matcher basicDetailsMatcher = basicDetails.matcher(importedPlayer.replaceAll("shortcut", "").replaceAll("transfer listed", "").replaceAll("   ", " ").replaceAll("  ", " "));
+		Matcher basicDetailsMatcher = basicDetails.matcher(importedPlayer.replaceAll("^\"", "").replaceAll("\"$", "").trim().replaceAll("shortcut", "").replaceAll("transfer listed", "").replaceAll("Part of the (.*) squad","").replaceAll("   ", " ").replaceAll("  ", " "));
 		if (basicDetailsMatcher.matches()) {
 				player.setFirstName(basicDetailsMatcher.group(2).split(" ", 2)[0]);
 				player.setLastName(basicDetailsMatcher.group(2).split(" ", 2)[1]);
 				player.setAge(Short.parseShort(basicDetailsMatcher.group(3)));
 				player.setWage(Integer.parseInt(basicDetailsMatcher.group(5).replaceAll(",", "")));
-				
 				player.setBattingAggression(Aggression.valueOf(basicDetailsMatcher.group(7)));
 				player.setBattingHand(Hand.valueOf(basicDetailsMatcher.group(8)));
 				player.setBowlingAggression(Aggression.valueOf(basicDetailsMatcher.group(10)));
