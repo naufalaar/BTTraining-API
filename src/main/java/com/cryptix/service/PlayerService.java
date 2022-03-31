@@ -27,6 +27,7 @@ import com.cryptix.enums.PlayerType;
 import com.cryptix.enums.Stamina;
 import com.cryptix.enums.Status;
 import com.cryptix.enums.Trait;
+import com.cryptix.helper.PlayerImportHelper;
 import com.cryptix.repository.PlayerRepository;
 
 @Service
@@ -34,6 +35,8 @@ public class PlayerService {
 	
 	@Autowired
 	PlayerRepository playerRepository;
+	@Autowired
+	PlayerImportHelper importHelper;
 	
 	public Player findPlayer(int playerId) {
 		return playerRepository.getById(playerId);
@@ -107,6 +110,18 @@ public class PlayerService {
 		for(String player: importedSquad) {
 			//players.add(parseImportedPlayer("\"" + player + "\""));
 			players.add(parseImportedPlayer(player));
+		}
+		return players;
+	}
+	
+	public List<Player> parseImportedSquad (String importedSquad){
+		List<Player> players = new ArrayList<>();
+		List<String> squad = importHelper.identifyPlayers(importedSquad);
+		
+		for(String player: squad) {
+			System.out.println(player);
+			players.add(parseImportedPlayer("\"" + player.trim() + "\""));
+			//players.add(parseImportedPlayer(player));
 		}
 		return players;
 	}

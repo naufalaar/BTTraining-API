@@ -1,5 +1,6 @@
 package com.cryptix.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -91,8 +92,13 @@ public class TrainingController {
 	}
 	
 	//To parse squad
+//	@PostMapping("/parseSquad")
+//	public List<Player> parseImportedSquad(@RequestBody List<String> importedSquad) {
+//		return playerService.parseImportedSquad(importedSquad);
+//	}
+	
 	@PostMapping("/parseSquad")
-	public List<Player> parseImportedSquad(@RequestBody List<String> importedSquad) {
+	public List<Player> parseImportedSquad(@RequestBody String importedSquad) {
 		return playerService.parseImportedSquad(importedSquad);
 	}
 	
