@@ -144,4 +144,10 @@ public class TrainingController {
 	public List<Integer> getCurrentWeek(){
 		return trainingSessionService.getCurrentWeek();
 	}
+	
+	@PostMapping("endSeason")
+	public List<Player> endSeason(@RequestBody List<Player> players) {
+		return playerService.saveSquad(players);
+	}
+	
 }

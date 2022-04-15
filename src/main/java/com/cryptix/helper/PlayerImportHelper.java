@@ -6,6 +6,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.cryptix.entity.Player;
+import com.cryptix.enums.BattrickSkills;
+import com.cryptix.enums.PlayerType;
+
 @Service
 public class PlayerImportHelper {
 	
@@ -22,6 +26,23 @@ public class PlayerImportHelper {
 		}
 		List<String> players = new ArrayList<>(Arrays.asList(builder.toString().split("#")));
 		return players;
+	}
+	
+	public PlayerType identifyPlayerType(Player player) {
+		if (player.getBowling().getValue() >= 5) {
+			if (player.getBatting().getValue() >= 5) 
+				return PlayerType.AllRounder;
+			else
+				return PlayerType.Bowler;
+		}
+		else if (player.getBatting().getValue() >= 5) {
+			if (player.getWicketKeeping().getValue() >= 5) 
+				return PlayerType.WicketKeeper;
+			else
+				return PlayerType.Batter;
+		}
+		else
+			return PlayerType.Useless;
 	}
 
 }

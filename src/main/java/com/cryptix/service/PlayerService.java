@@ -36,7 +36,7 @@ public class PlayerService {
 	@Autowired
 	PlayerRepository playerRepository;
 	@Autowired
-	PlayerImportHelper importHelper;
+	PlayerImportHelper playerHelper;
 	
 	public Player findPlayer(int playerId) {
 		return playerRepository.getById(playerId);
@@ -64,20 +64,7 @@ public class PlayerService {
 	public List<Player> findAllByTeam(Team team){
 		List<Player> players = playerRepository.findAllByTeam(team).stream().sorted(Comparator.comparing(Player::getLastName)).collect(Collectors.toList());
 		for(Player player: players) {
-			if (player.getBowling().getValue() >= 5) {
-				if (player.getBatting().getValue() >= 5) 
-					player.setPlayerType(PlayerType.AllRounder);
-				else
-					player.setPlayerType(PlayerType.Bowler);
-			}
-			else if (player.getBatting().getValue() >= 5) {
-				if (player.getWicketKeeping().getValue() >= 5) 
-					player.setPlayerType(PlayerType.WicketKeeper);
-				else
-					player.setPlayerType(PlayerType.Batter);
-			}
-			else
-				player.setPlayerType(PlayerType.Useless);
+			player.setPlayerType(playerHelper.identifyPlayerType(player));
 		}
 		return players;
 	}
@@ -108,7 +95,6 @@ public class PlayerService {
 	public List<Player> parseImportedSquad (List<String> importedSquad){
 		List<Player> players = new ArrayList<Player>();
 		for(String player: importedSquad) {
-			//players.add(parseImportedPlayer("\"" + player + "\""));
 			players.add(parseImportedPlayer(player));
 		}
 		return players;
@@ -116,12 +102,11 @@ public class PlayerService {
 	
 	public List<Player> parseImportedSquad (String importedSquad){
 		List<Player> players = new ArrayList<>();
-		List<String> squad = importHelper.identifyPlayers(importedSquad);
+		List<String> squad = playerHelper.identifyPlayers(importedSquad);
 		
 		for(String player: squad) {
 			System.out.println(player);
 			players.add(parseImportedPlayer("\"" + player.trim() + "\""));
-			//players.add(parseImportedPlayer(player));
 		}
 		return players;
 	}
